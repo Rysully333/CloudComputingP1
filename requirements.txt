@@ -1,0 +1,2 @@
+Pillow==9.3.0
+torchvision==0.15.1
