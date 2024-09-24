@@ -22,21 +22,3 @@ dbConsumer = KafkaConsumer(
 
 for message in dbConsumer:
     collection.insert_one({message.value})
-
-
-#Test Code
-from kafka import KafkaConsumer
-import json
-
-dbConsumer = KafkaConsumer(
-    'images',
-    group_id='db-consumer',
-    bootstrap_servers=['192.168.5.18:9092'],
-    value_deserializer=lambda m: json.loads(m.decode('ascii')),
-    consumer_timeout_ms=2000,
-    enable_auto_commit=True,
-    auto_offset_reset='earliest'
-)
-
-for message in dbConsumer:
-    print("Received Message")
