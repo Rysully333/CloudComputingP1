@@ -2,7 +2,6 @@ import base64
 import json
 import time # for sleep
 from kafka import KafkaProducer  # producer of events
-from kafka.vendor.six.moves import range
 from PIL import Image, ImageFilter
 from torchvision import datasets, transforms
 import io
@@ -37,9 +36,6 @@ def emulate_camera_feed():
     # return JSON obj
     return data
 
-result = emulate_camera_feed()
-print(result)
-
 # encode JSON to bytes
 def serialize_json(value):
     json_string = json.dumps(value)
@@ -53,18 +49,17 @@ producer = KafkaProducer(
     value_serializer=serialize_json  # serialize JSON to bytes
 )
 
-# send the contents 100 times after a sleep of 1 sec in between
-for i in range(100):
+# send the contents 5 times after a sleep of 1 sec in between
+for i in range(5):
     
     # generate the data
     data = emulate_camera_feed()
-    print(data)
 
     # send the data under topic images
     producer.send("images", value=data)
     producer.flush()
 
-    # sleep a second
+    # sleep 1 second
     time.sleep(1)
 
 producer.close()
